@@ -1,13 +1,11 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TYPE IF NOT EXISTS ticket_status AS ENUM (
-    'requested',
-    'pending',
-    'experimenting',
-    'finalizing'
-    -- Questions for phases not in Nathan's seq diagram:
-        -- Do we have a phase after `finalizing`. It sounds like there should be a completed or something
-        -- Will we have cancelled?
+    'REQUESTED',
+    'PENDING',
+    'EXPERIMENTING',
+    'FINALIZING',
+    'CLOSED'
 );
 
 CREATE TABLE IF NOT EXISTS tickets (
@@ -17,34 +15,36 @@ CREATE TABLE IF NOT EXISTS tickets (
     user_id         UUID NOT NULL,
     organization_id UUID NOT NULL,
 
-    status ticket_status NOT NULL DEFAULT 'request',
-
-    -- Maybe we should include delivery method information? 
-    -- As from what I remember they could either have the sample shipped or deliver it in person
+    status          ticket_status NOT NULL DEFAULT 'REQUESTED',
+    closed_reason   TEXT,
     
-    -- And maybe sample_type_id ? For like check if what deliver is correct.
-    -- Say on website client requested an analysis on a piece of Coal. But sent a Banana
+    -- Add sample_type_id column? To check if the delivered sample matches the request.
+    -- Say a client requested an analysis of a piece of Coal on the website, but instead sent a Banana.
+
+    sample_received_at      TIMESTAMPTZ,
+    experiment_started_at   TIMESTAMPTZ,
+    results_submitted_at    TIMESTAMPTZ,
+    closed_at               TIMESTAMPTZ,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ
-    -- Maybe also timestamps for phase changes? like sample_received_at, completed_at, ...
 );
 
 -- Join table for which experiment templates the client requested for this ticket.
 CREATE TABLE IF NOT EXISTS ticket_experiment_templates (
-    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- Used for creating an entry in experiments table
     ticket_id               UUID NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
     experiment_template_id  UUID NOT NULL,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ
-
-    UNIQUE (ticket_id, experiment_template_id) -- I forgot what you did for this Nathan, help
 );
 
 -- Index
+CREATE UNIQUE INDEX IF NOT EXISTS idx_tet_unique_active ON ticket_experiment_templates(ticket_id, experiment_template_id) WHERE deleted_at IS NULL;
+
 CREATE INDEX IF NOT EXISTS idx_tickets_user ON tickets(user_id);
 CREATE INDEX IF NOT EXISTS idx_tickets_organization ON tickets(organization_id);
 CREATE INDEX IF NOT EXISTS idx_tickets_status ON tickets(status);
