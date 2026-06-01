@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hoshina-dev/ticketing-service/internal/apperr"
 	"github.com/hoshina-dev/ticketing-service/internal/model"
-"gorm.io/gorm"
+	"gorm.io/gorm"
 )
 
 var allowedSortColumns = map[string]string{
@@ -105,4 +105,3 @@ func (r *ticketRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 	return nil
 }
-

@@ -8,8 +8,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/hoshina-dev/ticketing-service/internal/config"
 	_ "github.com/hoshina-dev/ticketing-service/docs"
+	"github.com/hoshina-dev/ticketing-service/internal/config"
 	"github.com/hoshina-dev/ticketing-service/internal/handler"
 	"github.com/hoshina-dev/ticketing-service/internal/middleware"
 	"github.com/hoshina-dev/ticketing-service/internal/repository"
@@ -17,11 +17,11 @@ import (
 	"github.com/hoshina-dev/ticketing-service/internal/service"
 )
 
-// @title           Ticketing Service API
-// @version         1.0
-// @description     Laboratory experiment ticketing service.
-// @host            localhost:8080
-// @BasePath        /
+// @title			Ticketing Service API
+// @version		1.0
+// @description	Laboratory experiment ticketing service.
+// @host			localhost:8080
+// @BasePath		/
 func main() {
 	cfg, err := config.Load()
 	if err != nil {

@@ -33,7 +33,7 @@ swagger:
 	fi
 
 format:
-	go run github.com/swaggo/swag/cmd/swag@v1.16.6 fmt
+	go run github.com/swaggo/swag/cmd/swag@latest fmt
 	go fmt ./...
 	gofmt -s -w .
 

@@ -20,18 +20,19 @@ func NewTicketExperimentTemplateHandler(svc service.TicketService) *TicketExperi
 }
 
 // AddExperimentTemplate godoc
-// @Summary      Add an experiment template to a ticket
-// @Tags         experiment-templates
-// @Accept       json
-// @Produce      json
-// @Param        id    path      string                          true  "Ticket ID"
-// @Param        body  body      dto.AddExperimentTemplateRequest  true  "Experiment template"
-// @Success      201   {object}  dto.TicketExperimentTemplateResponse
-// @Failure      400   {object}  dto.ErrorResponse
-// @Failure      404   {object}  dto.ErrorResponse
-// @Failure      409   {object}  dto.ErrorResponse
-// @Failure      500   {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets/{id}/experiment-templates [post]
+//
+//	@Summary	Add an experiment template to a ticket
+//	@Tags		experiment-templates
+//	@Accept		json
+//	@Produce	json
+//	@Param		id		path		string								true	"Ticket ID"
+//	@Param		body	body		dto.AddExperimentTemplateRequest	true	"Experiment template"
+//	@Success	201		{object}	dto.TicketExperimentTemplateResponse
+//	@Failure	400		{object}	dto.ErrorResponse
+//	@Failure	404		{object}	dto.ErrorResponse
+//	@Failure	409		{object}	dto.ErrorResponse
+//	@Failure	500		{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets/{id}/experiment-templates [post]
 func (h *TicketExperimentTemplateHandler) Add(c *fiber.Ctx) error {
 	ticketID, err := uuid.Parse(c.Params("id"))
 	if err != nil {
@@ -54,16 +55,17 @@ func (h *TicketExperimentTemplateHandler) Add(c *fiber.Ctx) error {
 }
 
 // RemoveExperimentTemplate godoc
-// @Summary      Remove an experiment template from a ticket
-// @Tags         experiment-templates
-// @Produce      json
-// @Param        id          path  string  true  "Ticket ID"
-// @Param        templateId  path  string  true  "Experiment template ID"
-// @Success      204
-// @Failure      400  {object}  dto.ErrorResponse
-// @Failure      404  {object}  dto.ErrorResponse
-// @Failure      500  {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets/{id}/experiment-templates/{templateId} [delete]
+//
+//	@Summary	Remove an experiment template from a ticket
+//	@Tags		experiment-templates
+//	@Produce	json
+//	@Param		id			path	string	true	"Ticket ID"
+//	@Param		templateId	path	string	true	"Experiment template ID"
+//	@Success	204
+//	@Failure	400	{object}	dto.ErrorResponse
+//	@Failure	404	{object}	dto.ErrorResponse
+//	@Failure	500	{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets/{id}/experiment-templates/{templateId} [delete]
 func (h *TicketExperimentTemplateHandler) Remove(c *fiber.Ctx) error {
 	ticketID, err := uuid.Parse(c.Params("id"))
 	if err != nil {
@@ -81,14 +83,15 @@ func (h *TicketExperimentTemplateHandler) Remove(c *fiber.Ctx) error {
 }
 
 // ListExperimentTemplates godoc
-// @Summary      List experiment templates on a ticket
-// @Tags         experiment-templates
-// @Produce      json
-// @Param        id   path      string  true  "Ticket ID"
-// @Success      200  {array}   dto.TicketExperimentTemplateResponse
-// @Failure      404  {object}  dto.ErrorResponse
-// @Failure      500  {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets/{id}/experiment-templates [get]
+//
+//	@Summary	List experiment templates on a ticket
+//	@Tags		experiment-templates
+//	@Produce	json
+//	@Param		id	path		string	true	"Ticket ID"
+//	@Success	200	{array}		dto.TicketExperimentTemplateResponse
+//	@Failure	404	{object}	dto.ErrorResponse
+//	@Failure	500	{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets/{id}/experiment-templates [get]
 func (h *TicketExperimentTemplateHandler) List(c *fiber.Ctx) error {
 	ticketID, err := uuid.Parse(c.Params("id"))
 	if err != nil {

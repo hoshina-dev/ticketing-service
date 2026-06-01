@@ -20,15 +20,16 @@ func NewTicketHandler(svc service.TicketService) *TicketHandler {
 }
 
 // CreateTicket godoc
-// @Summary      Create a ticket
-// @Tags         tickets
-// @Accept       json
-// @Produce      json
-// @Param        body  body      dto.CreateTicketRequest  true  "Create ticket"
-// @Success      201   {object}  dto.TicketResponse
-// @Failure      400   {object}  dto.ErrorResponse
-// @Failure      500   {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets [post]
+//
+//	@Summary	Create a ticket
+//	@Tags		tickets
+//	@Accept		json
+//	@Produce	json
+//	@Param		body	body		dto.CreateTicketRequest	true	"Create ticket"
+//	@Success	201		{object}	dto.TicketResponse
+//	@Failure	400		{object}	dto.ErrorResponse
+//	@Failure	500		{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets [post]
 func (h *TicketHandler) Create(c *fiber.Ctx) error {
 	var req dto.CreateTicketRequest
 	if err := c.BodyParser(&req); err != nil {
@@ -46,18 +47,19 @@ func (h *TicketHandler) Create(c *fiber.Ctx) error {
 }
 
 // ListTickets godoc
-// @Summary      List tickets
-// @Tags         tickets
-// @Produce      json
-// @Param        user_id          query     string  false  "Filter by user ID"
-// @Param        organization_id  query     string  false  "Filter by organization ID"
-// @Param        status           query     string  false  "Filter by status"
-// @Param        sort_by          query     string  false  "Sort field (created_at, updated_at, status)"
-// @Param        sort_dir         query     string  false  "Sort direction (asc, desc)"
-// @Success      200  {array}   dto.TicketResponse
-// @Failure      400  {object}  dto.ErrorResponse
-// @Failure      500  {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets [get]
+//
+//	@Summary	List tickets
+//	@Tags		tickets
+//	@Produce	json
+//	@Param		user_id			query		string	false	"Filter by user ID"
+//	@Param		organization_id	query		string	false	"Filter by organization ID"
+//	@Param		status			query		string	false	"Filter by status"
+//	@Param		sort_by			query		string	false	"Sort field (created_at, updated_at, status)"
+//	@Param		sort_dir		query		string	false	"Sort direction (asc, desc)"
+//	@Success	200				{array}		dto.TicketResponse
+//	@Failure	400				{object}	dto.ErrorResponse
+//	@Failure	500				{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets [get]
 func (h *TicketHandler) List(c *fiber.Ctx) error {
 	var q dto.ListTicketsQuery
 	if err := c.QueryParser(&q); err != nil {
@@ -72,14 +74,15 @@ func (h *TicketHandler) List(c *fiber.Ctx) error {
 }
 
 // GetByID godoc
-// @Summary      Get a ticket by ID
-// @Tags         tickets
-// @Produce      json
-// @Param        id   path      string  true  "Ticket ID"
-// @Success      200  {object}  dto.TicketResponse
-// @Failure      404  {object}  dto.ErrorResponse
-// @Failure      500  {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets/{id} [get]
+//
+//	@Summary	Get a ticket by ID
+//	@Tags		tickets
+//	@Produce	json
+//	@Param		id	path		string	true	"Ticket ID"
+//	@Success	200	{object}	dto.TicketResponse
+//	@Failure	404	{object}	dto.ErrorResponse
+//	@Failure	500	{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets/{id} [get]
 func (h *TicketHandler) GetByID(c *fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
@@ -94,19 +97,20 @@ func (h *TicketHandler) GetByID(c *fiber.Ctx) error {
 }
 
 // TransitionStatus godoc
-// @Summary      Transition ticket status
-// @Tags         tickets
-// @Accept       json
-// @Produce      json
-// @Param        id    path      string                       true  "Ticket ID"
-// @Param        body  body      dto.TransitionStatusRequest  true  "Transition request"
-// @Success      200   {object}  dto.TicketResponse
-// @Failure      400   {object}  dto.ErrorResponse
-// @Failure      404   {object}  dto.ErrorResponse
-// @Failure      409   {object}  dto.ErrorResponse
-// @Failure      422   {object}  dto.ErrorResponse
-// @Failure      500   {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets/{id}/status [patch]
+//
+//	@Summary	Transition ticket status
+//	@Tags		tickets
+//	@Accept		json
+//	@Produce	json
+//	@Param		id		path		string						true	"Ticket ID"
+//	@Param		body	body		dto.TransitionStatusRequest	true	"Transition request"
+//	@Success	200		{object}	dto.TicketResponse
+//	@Failure	400		{object}	dto.ErrorResponse
+//	@Failure	404		{object}	dto.ErrorResponse
+//	@Failure	409		{object}	dto.ErrorResponse
+//	@Failure	422		{object}	dto.ErrorResponse
+//	@Failure	500		{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets/{id}/status [patch]
 func (h *TicketHandler) TransitionStatus(c *fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
@@ -129,14 +133,15 @@ func (h *TicketHandler) TransitionStatus(c *fiber.Ctx) error {
 }
 
 // Delete godoc
-// @Summary      Delete a ticket
-// @Tags         tickets
-// @Produce      json
-// @Param        id   path  string  true  "Ticket ID"
-// @Success      204
-// @Failure      404  {object}  dto.ErrorResponse
-// @Failure      500  {object}  dto.ErrorResponse
-// @Router       /api/v1/tickets/{id} [delete]
+//
+//	@Summary	Delete a ticket
+//	@Tags		tickets
+//	@Produce	json
+//	@Param		id	path	string	true	"Ticket ID"
+//	@Success	204
+//	@Failure	404	{object}	dto.ErrorResponse
+//	@Failure	500	{object}	dto.ErrorResponse
+//	@Router		/api/v1/tickets/{id} [delete]
 func (h *TicketHandler) Delete(c *fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
