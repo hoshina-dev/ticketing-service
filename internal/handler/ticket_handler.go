@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -33,17 +31,17 @@ func NewTicketHandler(svc service.TicketService) *TicketHandler {
 func (h *TicketHandler) Create(c *fiber.Ctx) error {
 	var req dto.CreateTicketRequest
 	if err := c.BodyParser(&req); err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid request body")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid request body")
 	}
 	if err := h.validate.Struct(req); err != nil {
-		return fiber.NewError(http.StatusBadRequest, err.Error())
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
 	resp, err := h.svc.CreateTicket(c.Context(), req)
 	if err != nil {
 		return err
 	}
-	return c.Status(http.StatusCreated).JSON(resp)
+	return c.Status(fiber.StatusCreated).JSON(resp)
 }
 
 // ListTickets godoc
@@ -63,7 +61,7 @@ func (h *TicketHandler) Create(c *fiber.Ctx) error {
 func (h *TicketHandler) List(c *fiber.Ctx) error {
 	var q dto.ListTicketsQuery
 	if err := c.QueryParser(&q); err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid query parameters")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid query parameters")
 	}
 
 	resp, err := h.svc.ListTickets(c.Context(), q)
@@ -86,7 +84,7 @@ func (h *TicketHandler) List(c *fiber.Ctx) error {
 func (h *TicketHandler) GetByID(c *fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid ticket id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid ticket id")
 	}
 
 	resp, err := h.svc.GetTicket(c.Context(), id)
@@ -114,15 +112,15 @@ func (h *TicketHandler) GetByID(c *fiber.Ctx) error {
 func (h *TicketHandler) TransitionStatus(c *fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid ticket id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid ticket id")
 	}
 
 	var req dto.TransitionStatusRequest
 	if err := c.BodyParser(&req); err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid request body")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid request body")
 	}
 	if err := h.validate.Struct(req); err != nil {
-		return fiber.NewError(http.StatusBadRequest, err.Error())
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
 	resp, err := h.svc.TransitionStatus(c.Context(), id, req)
@@ -145,11 +143,11 @@ func (h *TicketHandler) TransitionStatus(c *fiber.Ctx) error {
 func (h *TicketHandler) Delete(c *fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid ticket id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid ticket id")
 	}
 
 	if err := h.svc.DeleteTicket(c.Context(), id); err != nil {
 		return err
 	}
-	return c.SendStatus(http.StatusNoContent)
+	return c.SendStatus(fiber.StatusNoContent)
 }

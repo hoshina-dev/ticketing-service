@@ -2,5 +2,4 @@ package dto
 
 type ErrorResponse struct {
 	Message string `json:"message"`
-	Details any    `json:"details,omitempty"`
 }

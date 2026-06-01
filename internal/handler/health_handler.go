@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"net/http"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -42,7 +41,7 @@ func (h *HealthHandler) Ready(c *fiber.Ctx) error {
 
 	sqlDB, err := h.db.DB()
 	if err != nil || sqlDB.PingContext(ctx) != nil {
-		return c.Status(http.StatusServiceUnavailable).JSON(fiber.Map{"status": "unavailable"})
+		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"status": "unavailable"})
 	}
 	return c.JSON(fiber.Map{"status": "ok"})
 }

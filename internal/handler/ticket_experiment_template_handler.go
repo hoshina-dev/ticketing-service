@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -36,22 +34,22 @@ func NewTicketExperimentTemplateHandler(svc service.TicketService) *TicketExperi
 func (h *TicketExperimentTemplateHandler) Add(c *fiber.Ctx) error {
 	ticketID, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid ticket id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid ticket id")
 	}
 
 	var req dto.AddExperimentTemplateRequest
 	if err := c.BodyParser(&req); err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid request body")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid request body")
 	}
 	if err := h.validate.Struct(req); err != nil {
-		return fiber.NewError(http.StatusBadRequest, err.Error())
+		return fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
 	resp, err := h.svc.AddExperimentTemplate(c.Context(), ticketID, req)
 	if err != nil {
 		return err
 	}
-	return c.Status(http.StatusCreated).JSON(resp)
+	return c.Status(fiber.StatusCreated).JSON(resp)
 }
 
 // RemoveExperimentTemplate godoc
@@ -69,17 +67,17 @@ func (h *TicketExperimentTemplateHandler) Add(c *fiber.Ctx) error {
 func (h *TicketExperimentTemplateHandler) Remove(c *fiber.Ctx) error {
 	ticketID, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid ticket id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid ticket id")
 	}
 	templateID, err := uuid.Parse(c.Params("templateId"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid template id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid template id")
 	}
 
 	if err := h.svc.RemoveExperimentTemplate(c.Context(), ticketID, templateID); err != nil {
 		return err
 	}
-	return c.SendStatus(http.StatusNoContent)
+	return c.SendStatus(fiber.StatusNoContent)
 }
 
 // ListExperimentTemplates godoc
@@ -95,7 +93,7 @@ func (h *TicketExperimentTemplateHandler) Remove(c *fiber.Ctx) error {
 func (h *TicketExperimentTemplateHandler) List(c *fiber.Ctx) error {
 	ticketID, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.NewError(http.StatusBadRequest, "invalid ticket id")
+		return fiber.NewError(fiber.StatusBadRequest, "invalid ticket id")
 	}
 
 	resp, err := h.svc.ListExperimentTemplates(c.Context(), ticketID)

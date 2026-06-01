@@ -3,7 +3,6 @@ package middleware
 import (
 	"errors"
 	"log/slog"
-	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/hoshina-dev/ticketing-service/internal/apperr"
@@ -22,5 +21,5 @@ func ErrorHandler(c *fiber.Ctx, err error) error {
 	}
 
 	slog.Error("unhandled error", "error", err.Error(), "path", c.Path())
-	return c.Status(http.StatusInternalServerError).JSON(dto.ErrorResponse{Message: "internal server error"})
+	return c.Status(fiber.StatusInternalServerError).JSON(dto.ErrorResponse{Message: "internal server error"})
 }
