@@ -2,9 +2,9 @@ package router
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
 	"github.com/hoshina-dev/ticketing-service/internal/handler"
 	"github.com/hoshina-dev/ticketing-service/internal/middleware"
-	fiberswagger "github.com/swaggo/fiber-swagger"
 )
 
 func Register(
@@ -17,7 +17,7 @@ func Register(
 
 	app.Get("/health", healthHandler.Live)
 	app.Get("/ready", healthHandler.Ready)
-	app.Get("/docs/*", fiberswagger.WrapHandler)
+	app.Get("/docs/*", swagger.HandlerDefault)
 
 	v1 := app.Group("/api/v1")
 
