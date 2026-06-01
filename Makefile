@@ -37,10 +37,4 @@ format:
 	go fmt ./...
 	gofmt -s -w .
 
-build:
-	go build -o bin/custapi cmd/main.go
-
-seed:
-	go run cmd/seed/main.go
-
 .DEFAULT_GOAL = run

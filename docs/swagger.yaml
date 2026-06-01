@@ -1,0 +1,393 @@
+basePath: /
+definitions:
+  github_com_hoshina-dev_ticketing-service_internal_dto.AddExperimentTemplateRequest:
+    properties:
+      experiment_template_id:
+        type: string
+    required:
+    - experiment_template_id
+    type: object
+  github_com_hoshina-dev_ticketing-service_internal_dto.CreateTicketRequest:
+    properties:
+      experiment_template_ids:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      organization_id:
+        type: string
+      user_id:
+        type: string
+    required:
+    - experiment_template_ids
+    - organization_id
+    - user_id
+    type: object
+  github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse:
+    properties:
+      details: {}
+      message:
+        type: string
+    type: object
+  github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse:
+    properties:
+      created_at:
+        type: string
+      experiment_template_id:
+        type: string
+      id:
+        type: string
+      ticket_id:
+        type: string
+    type: object
+  github_com_hoshina-dev_ticketing-service_internal_dto.TicketResponse:
+    properties:
+      closed_at:
+        type: string
+      closed_reason:
+        type: string
+      created_at:
+        type: string
+      experiment_started_at:
+        type: string
+      experiment_templates:
+        items:
+          $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse'
+        type: array
+      id:
+        type: string
+      organization_id:
+        type: string
+      results_submitted_at:
+        type: string
+      sample_received_at:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  github_com_hoshina-dev_ticketing-service_internal_dto.TransitionStatusRequest:
+    properties:
+      closed_reason:
+        type: string
+      status:
+        type: string
+      user_id:
+        type: string
+    required:
+    - status
+    - user_id
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Laboratory experiment ticketing service.
+  title: Ticketing Service API
+  version: "1.0"
+paths:
+  /api/v1/tickets:
+    get:
+      parameters:
+      - description: Filter by user ID
+        in: query
+        name: user_id
+        type: string
+      - description: Filter by organization ID
+        in: query
+        name: organization_id
+        type: string
+      - description: Filter by status
+        in: query
+        name: status
+        type: string
+      - description: Sort field (created_at, updated_at, status)
+        in: query
+        name: sort_by
+        type: string
+      - description: Sort direction (asc, desc)
+        in: query
+        name: sort_dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: List tickets
+      tags:
+      - tickets
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create ticket
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.CreateTicketRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: Create a ticket
+      tags:
+      - tickets
+  /api/v1/tickets/{id}:
+    delete:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: Delete a ticket
+      tags:
+      - tickets
+    get:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: Get a ticket by ID
+      tags:
+      - tickets
+  /api/v1/tickets/{id}/experiment-templates:
+    get:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: List experiment templates on a ticket
+      tags:
+      - experiment-templates
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Experiment template
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.AddExperimentTemplateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: Add an experiment template to a ticket
+      tags:
+      - experiment-templates
+  /api/v1/tickets/{id}/experiment-templates/{templateId}:
+    delete:
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Experiment template ID
+        in: path
+        name: templateId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: Remove an experiment template from a ticket
+      tags:
+      - experiment-templates
+  /api/v1/tickets/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Transition request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TransitionStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse'
+      summary: Transition ticket status
+      tags:
+      - tickets
+  /health:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Liveness probe
+      tags:
+      - health
+  /ready:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Readiness probe
+      tags:
+      - health
+swagger: "2.0"
