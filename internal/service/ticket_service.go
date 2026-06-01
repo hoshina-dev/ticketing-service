@@ -107,7 +107,7 @@ func (s *ticketService) TransitionStatus(ctx context.Context, id uuid.UUID, req 
 	}
 
 	if ticket.Status == model.StatusClosed {
-		return nil, apperr.ErrTicketAlreadyClosed
+		return nil, apperr.ErrTicketClosed
 	}
 
 	target := model.TicketStatus(req.Status)
@@ -157,7 +157,7 @@ func (s *ticketService) AddExperimentTemplate(ctx context.Context, ticketID uuid
 		return nil, err
 	}
 	if ticket.Status == model.StatusClosed {
-		return nil, apperr.ErrTicketNotOpen
+		return nil, apperr.ErrTicketClosed
 	}
 
 	tet := &model.TicketExperimentTemplate{
@@ -177,7 +177,7 @@ func (s *ticketService) RemoveExperimentTemplate(ctx context.Context, ticketID, 
 		return err
 	}
 	if ticket.Status == model.StatusClosed {
-		return apperr.ErrTicketNotOpen
+		return apperr.ErrTicketClosed
 	}
 
 	return s.tetRepo.Remove(ctx, ticketID, experimentTemplateID)
