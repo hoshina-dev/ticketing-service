@@ -1,12 +1,16 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TYPE IF NOT EXISTS ticket_status AS ENUM (
-    'REQUESTED',
-    'PENDING',
-    'EXPERIMENTING',
-    'FINALIZING',
-    'CLOSED'
-);
+DO $$ BEGIN
+    CREATE TYPE ticket_status AS ENUM (
+        'REQUESTED',
+        'PENDING',
+        'EXPERIMENTING',
+        'FINALIZING',
+        'CLOSED'
+    );
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
 
 CREATE TABLE IF NOT EXISTS tickets (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
