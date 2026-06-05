@@ -516,7 +516,6 @@ const docTemplate = `{
         "github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse": {
             "type": "object",
             "properties": {
-                "details": {},
                 "message": {
                     "type": "string"
                 }
@@ -586,17 +585,13 @@ const docTemplate = `{
         "github_com_hoshina-dev_ticketing-service_internal_dto.TransitionStatusRequest": {
             "type": "object",
             "required": [
-                "status",
-                "user_id"
+                "status"
             ],
             "properties": {
                 "closed_reason": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
-                },
-                "user_id": {
                     "type": "string"
                 }
             }

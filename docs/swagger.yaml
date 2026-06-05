@@ -25,7 +25,6 @@ definitions:
     type: object
   github_com_hoshina-dev_ticketing-service_internal_dto.ErrorResponse:
     properties:
-      details: {}
       message:
         type: string
     type: object
@@ -75,11 +74,8 @@ definitions:
         type: string
       status:
         type: string
-      user_id:
-        type: string
     required:
     - status
-    - user_id
     type: object
 host: localhost:8080
 info:

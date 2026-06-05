@@ -13,9 +13,8 @@ type CreateTicketRequest struct {
 }
 
 type TransitionStatusRequest struct {
-	UserID       uuid.UUID `json:"user_id" validate:"required"`
-	Status       string    `json:"status" validate:"required"`
-	ClosedReason *string   `json:"closed_reason"`
+	Status       string  `json:"status" validate:"required"`
+	ClosedReason *string `json:"closed_reason"`
 }
 
 type ListTicketsQuery struct {
