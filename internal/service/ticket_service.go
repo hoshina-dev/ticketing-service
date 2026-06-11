@@ -48,14 +48,12 @@ func (s *ticketService) CreateTicket(ctx context.Context, req dto.CreateTicketRe
 		return nil, err
 	}
 
-	for _, templateID := range req.ExperimentTemplateIDs {
-		tet := &model.TicketExperimentTemplate{
-			TicketID:             ticket.ID,
-			ExperimentTemplateID: templateID,
-		}
-		if err := s.tetRepo.Add(ctx, tet); err != nil {
-			return nil, err
-		}
+	tet := &model.TicketExperimentTemplate{
+		TicketID:             ticket.ID,
+		ExperimentTemplateID: req.ExperimentTemplateID,
+	}
+	if err := s.tetRepo.Add(ctx, tet); err != nil {
+		return nil, err
 	}
 
 	created, err := s.ticketRepo.GetByID(ctx, ticket.ID)
@@ -160,6 +158,14 @@ func (s *ticketService) AddExperimentTemplate(ctx context.Context, ticketID uuid
 		return nil, apperr.ErrTicketClosed
 	}
 
+	existing, err := s.tetRepo.GetByTicketID(ctx, ticketID)
+	if err != nil {
+		return nil, err
+	}
+	if len(existing) > 0 {
+		return nil, apperr.ErrTicketHasTemplate
+	}
+
 	tet := &model.TicketExperimentTemplate{
 		TicketID:             ticketID,
 		ExperimentTemplateID: req.ExperimentTemplateID,
@@ -213,10 +219,9 @@ func toTicketResponse(t *model.Ticket) *dto.TicketResponse {
 		ClosedAt:            t.ClosedAt,
 		CreatedAt:           t.CreatedAt,
 		UpdatedAt:           t.UpdatedAt,
-		ExperimentTemplates: make([]dto.TicketExperimentTemplateResponse, len(t.ExperimentTemplates)),
 	}
-	for i, tet := range t.ExperimentTemplates {
-		resp.ExperimentTemplates[i] = *toTETResponse(&tet)
+	if t.ExperimentTemplate != nil {
+		resp.ExperimentTemplate = toTETResponse(t.ExperimentTemplate)
 	}
 	return resp
 }

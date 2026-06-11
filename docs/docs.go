@@ -493,17 +493,13 @@ const docTemplate = `{
         "github_com_hoshina-dev_ticketing-service_internal_dto.CreateTicketRequest": {
             "type": "object",
             "required": [
-                "experiment_template_ids",
+                "experiment_template_id",
                 "organization_id",
                 "user_id"
             ],
             "properties": {
-                "experiment_template_ids": {
-                    "type": "array",
-                    "minItems": 1,
-                    "items": {
-                        "type": "string"
-                    }
+                "experiment_template_id": {
+                    "type": "string"
                 },
                 "organization_id": {
                     "type": "string"
@@ -553,11 +549,8 @@ const docTemplate = `{
                 "experiment_started_at": {
                     "type": "string"
                 },
-                "experiment_templates": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse"
-                    }
+                "experiment_template": {
+                    "$ref": "#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse"
                 },
                 "id": {
                     "type": "string"

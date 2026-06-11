@@ -9,17 +9,14 @@ definitions:
     type: object
   github_com_hoshina-dev_ticketing-service_internal_dto.CreateTicketRequest:
     properties:
-      experiment_template_ids:
-        items:
-          type: string
-        minItems: 1
-        type: array
+      experiment_template_id:
+        type: string
       organization_id:
         type: string
       user_id:
         type: string
     required:
-    - experiment_template_ids
+    - experiment_template_id
     - organization_id
     - user_id
     type: object
@@ -49,10 +46,8 @@ definitions:
         type: string
       experiment_started_at:
         type: string
-      experiment_templates:
-        items:
-          $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse'
-        type: array
+      experiment_template:
+        $ref: '#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse'
       id:
         type: string
       organization_id:

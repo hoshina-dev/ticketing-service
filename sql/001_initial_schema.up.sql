@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS ticket_experiment_templates (
 );
 
 -- Index
-CREATE UNIQUE INDEX IF NOT EXISTS idx_tet_unique_active ON ticket_experiment_templates(ticket_id, experiment_template_id) WHERE deleted_at IS NULL;
+-- One-to-one: a ticket may have at most one active experiment template (one experiment form per ticket).
+CREATE UNIQUE INDEX IF NOT EXISTS idx_tet_one_per_ticket ON ticket_experiment_templates(ticket_id) WHERE deleted_at IS NULL;
 
 CREATE INDEX IF NOT EXISTS idx_tickets_user ON tickets(user_id);
 CREATE INDEX IF NOT EXISTS idx_tickets_organization ON tickets(organization_id);

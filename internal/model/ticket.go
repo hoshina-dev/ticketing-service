@@ -23,7 +23,7 @@ type Ticket struct {
 	UpdatedAt time.Time      `gorm:"autoUpdateTime"`
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 
-	ExperimentTemplates []TicketExperimentTemplate `gorm:"foreignKey:TicketID"`
+	ExperimentTemplate *TicketExperimentTemplate `gorm:"foreignKey:TicketID"`
 }
 
 func (t *Ticket) TableName() string {

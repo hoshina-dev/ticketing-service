@@ -46,7 +46,7 @@ func (r *ticketRepository) Create(ctx context.Context, ticket *model.Ticket) err
 func (r *ticketRepository) GetByID(ctx context.Context, id uuid.UUID) (*model.Ticket, error) {
 	var ticket model.Ticket
 	err := r.db.WithContext(ctx).
-		Preload("ExperimentTemplates").
+		Preload("ExperimentTemplate").
 		First(&ticket, "id = ?", id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -81,7 +81,7 @@ func (r *ticketRepository) GetAll(ctx context.Context, filter TicketFilter, sort
 
 	var tickets []*model.Ticket
 	err := q.
-		Preload("ExperimentTemplates").
+		Preload("ExperimentTemplate").
 		Order(fmt.Sprintf("%s %s", col, sortDir)).
 		Find(&tickets).Error
 	if err != nil {

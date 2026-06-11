@@ -7,9 +7,9 @@ import (
 )
 
 type CreateTicketRequest struct {
-	UserID                uuid.UUID   `json:"user_id" validate:"required"`
-	OrganizationID        uuid.UUID   `json:"organization_id" validate:"required"`
-	ExperimentTemplateIDs []uuid.UUID `json:"experiment_template_ids" validate:"required,min=1,dive"`
+	UserID               uuid.UUID `json:"user_id" validate:"required"`
+	OrganizationID       uuid.UUID `json:"organization_id" validate:"required"`
+	ExperimentTemplateID uuid.UUID `json:"experiment_template_id" validate:"required"`
 }
 
 type TransitionStatusRequest struct {
@@ -40,5 +40,5 @@ type TicketResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	ExperimentTemplates []TicketExperimentTemplateResponse `json:"experiment_templates"`
+	ExperimentTemplate *TicketExperimentTemplateResponse `json:"experiment_template,omitempty"`
 }
