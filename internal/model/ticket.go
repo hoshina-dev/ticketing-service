@@ -11,6 +11,7 @@ type Ticket struct {
 	ID             uuid.UUID    `gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
 	UserID         uuid.UUID    `gorm:"type:uuid;not null;index:idx_tickets_user"`
 	OrganizationID uuid.UUID    `gorm:"type:uuid;not null;index:idx_tickets_organization"`
+	Name           string       `gorm:"type:text"`
 	Status         TicketStatus `gorm:"type:ticket_status;not null;default:REQUESTED;index:idx_tickets_status"`
 	ClosedReason   *string      `gorm:"type:text"`
 
