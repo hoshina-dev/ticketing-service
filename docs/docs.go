@@ -501,6 +501,9 @@ const docTemplate = `{
                 "experiment_template_id": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                },
                 "organization_id": {
                     "type": "string"
                 },
@@ -553,6 +556,9 @@ const docTemplate = `{
                     "$ref": "#/definitions/github_com_hoshina-dev_ticketing-service_internal_dto.TicketExperimentTemplateResponse"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 },
                 "organization_id": {

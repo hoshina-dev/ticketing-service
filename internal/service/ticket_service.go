@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -38,9 +39,15 @@ func NewTicketService(
 }
 
 func (s *ticketService) CreateTicket(ctx context.Context, req dto.CreateTicketRequest) (*dto.TicketResponse, error) {
+	name := generateTicketName()
+	if req.Name != nil && strings.TrimSpace(*req.Name) != "" {
+		name = strings.TrimSpace(*req.Name)
+	}
+
 	ticket := &model.Ticket{
 		UserID:         req.UserID,
 		OrganizationID: req.OrganizationID,
+		Name:           name,
 		Status:         model.StatusRequested,
 	}
 
@@ -211,6 +218,7 @@ func toTicketResponse(t *model.Ticket) *dto.TicketResponse {
 		ID:                  t.ID,
 		UserID:              t.UserID,
 		OrganizationID:      t.OrganizationID,
+		Name:                t.Name,
 		Status:              string(t.Status),
 		ClosedReason:        t.ClosedReason,
 		SampleReceivedAt:    t.SampleReceivedAt,

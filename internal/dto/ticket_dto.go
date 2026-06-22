@@ -9,6 +9,7 @@ import (
 type CreateTicketRequest struct {
 	UserID               uuid.UUID `json:"user_id" validate:"required"`
 	OrganizationID       uuid.UUID `json:"organization_id" validate:"required"`
+	Name                 *string   `json:"name"`
 	ExperimentTemplateID uuid.UUID `json:"experiment_template_id" validate:"required"`
 }
 
@@ -29,6 +30,7 @@ type TicketResponse struct {
 	ID             uuid.UUID `json:"id"`
 	UserID         uuid.UUID `json:"user_id"`
 	OrganizationID uuid.UUID `json:"organization_id"`
+	Name           string    `json:"name"`
 	Status         string    `json:"status"`
 
 	ClosedReason        *string    `json:"closed_reason,omitempty"`
