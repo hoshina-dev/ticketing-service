@@ -1,4 +1,6 @@
-.PHONY: install run test deps lint generate swagger format build
+.PHONY: install run test deps lint generate codegen-copium swagger format build
+
+COPUM_OPENAPI_URL ?= http://localhost:8081/swagger/doc.json
 
 install:
 	go mod download
@@ -18,7 +20,11 @@ deps:
 lint:
 	golangci-lint run ./...
 
-generate:
+codegen-copium:
+	go run ./tools/copium-openapi -url $(COPUM_OPENAPI_URL) -o internal/clients/copium/openapi.json
+	go generate ./internal/clients/copium/...
+
+generate: codegen-copium
 	go generate ./...
 
 swagger:

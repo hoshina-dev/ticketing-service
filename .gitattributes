@@ -1,0 +1,6 @@
+# Exclude generated files from GitHub language statistics
+docs/docs.go linguist-generated
+docs/swagger.json linguist-generated
+docs/swagger.yaml linguist-generated
+internal/clients/**/client.gen.go linguist-generated
+internal/clients/**/openapi.json linguist-generated

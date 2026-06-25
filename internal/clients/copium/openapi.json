@@ -1,0 +1,951 @@
+{
+    "components": {
+        "schemas": {
+            "CreateTemplateRequest": {
+                "properties": {
+                    "code": {
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "maxLength": 255,
+                        "minLength": 1,
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "code",
+                    "name"
+                ],
+                "type": "object"
+            },
+            "CreateTemplateVersionRequest": {
+                "properties": {
+                    "body_html": {
+                        "type": "string"
+                    },
+                    "body_text": {
+                        "type": "string"
+                    },
+                    "from_address": {
+                        "type": "string"
+                    },
+                    "params_schema": {
+                        "type": "object"
+                    },
+                    "subject": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "body_html",
+                    "params_schema",
+                    "subject"
+                ],
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "properties": {
+                    "error": {
+                        "example": "not found: template \u003cuuid\u003e",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "OutboxResponse": {
+                "properties": {
+                    "attempts": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "last_error": {
+                        "type": "string"
+                    },
+                    "max_attempts": {
+                        "type": "integer"
+                    },
+                    "provider": {
+                        "type": "string"
+                    },
+                    "provider_message_id": {
+                        "type": "string"
+                    },
+                    "scheduled_at": {
+                        "type": "string"
+                    },
+                    "sent_at": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "example": "sent",
+                        "type": "string"
+                    },
+                    "subject": {
+                        "type": "string"
+                    },
+                    "template_version_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "to_address": {
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PreviewTemplateRequest": {
+                "properties": {
+                    "body_html": {
+                        "type": "string"
+                    },
+                    "body_text": {
+                        "type": "string"
+                    },
+                    "params": {
+                        "type": "object"
+                    },
+                    "params_schema": {
+                        "type": "object"
+                    },
+                    "subject": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "body_html",
+                    "params_schema",
+                    "subject"
+                ],
+                "type": "object"
+            },
+            "PreviewTemplateResponse": {
+                "properties": {
+                    "body_html": {
+                        "type": "string"
+                    },
+                    "body_text": {
+                        "type": "string"
+                    },
+                    "subject": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SendEmailRequest": {
+                "properties": {
+                    "params": {
+                        "type": "object"
+                    },
+                    "template_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "to_address": {
+                        "example": "someone@example.com",
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "example": "00000000-0000-0000-0000-000000000000",
+                        "format": "uuid",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "template_id"
+                ],
+                "type": "object"
+            },
+            "SendEmailResponse": {
+                "properties": {
+                    "outbox_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "status": {
+                        "example": "queued",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "SetActiveVersionRequest": {
+                "properties": {
+                    "version_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "version_id"
+                ],
+                "type": "object"
+            },
+            "TemplateResponse": {
+                "properties": {
+                    "active_version_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "TemplateVersionResponse": {
+                "properties": {
+                    "body_html": {
+                        "type": "string"
+                    },
+                    "body_text": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "created_by": {
+                        "type": "string"
+                    },
+                    "from_address": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "params_schema": {
+                        "type": "object"
+                    },
+                    "subject": {
+                        "type": "string"
+                    },
+                    "template_id": {
+                        "format": "uuid",
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "info": {
+        "contact": {
+            "name": "copium maintainers"
+        },
+        "description": "Manages versioned email templates and dispatches emails\nasynchronously via a DB-backed outbox to a pluggable Sender.",
+        "license": {
+            "name": "MIT"
+        },
+        "title": "Copium Communication API",
+        "version": "1.0"
+    },
+    "openapi": "3.0.3",
+    "paths": {
+        "/emails": {
+            "get": {
+                "description": "Returns recent outbox rows newest-first, optionally narrowed by\nstatus and a created_at window. `from`/`to` accept RFC3339 time.",
+                "parameters": [
+                    {
+                        "description": "queued|sending|sent|failed|dead",
+                        "in": "query",
+                        "name": "status",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "RFC3339 start (inclusive)",
+                        "in": "query",
+                        "name": "from",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "RFC3339 end (exclusive)",
+                        "in": "query",
+                        "name": "to",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "max rows (default 200, max 1000)",
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/OutboxResponse"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "bad query params"
+                    }
+                },
+                "summary": "List outbox rows",
+                "tags": [
+                    "emails"
+                ]
+            }
+        },
+        "/emails/send": {
+            "post": {
+                "description": "Validates params against the active template version's JSON Schema,\nresolves the recipient via custapi, renders the message, and writes\na snapshot to email_outbox. The worker performs the actual send.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SendEmailRequest"
+                            }
+                        }
+                    },
+                    "description": "Send request",
+                    "required": true,
+                    "x-originalParamName": "request"
+                },
+                "responses": {
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SendEmailResponse"
+                                }
+                            }
+                        },
+                        "description": "Accepted"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "invalid JSON or params failed schema"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "template or user not found"
+                    },
+                    "502": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "custapi unreachable"
+                    }
+                },
+                "summary": "Enqueue an email",
+                "tags": [
+                    "emails"
+                ]
+            }
+        },
+        "/emails/{id}": {
+            "get": {
+                "description": "Returns the snapshot, status, attempts, last_error and provider\nmessage id for one queued/sent/dead email.",
+                "parameters": [
+                    {
+                        "description": "outbox UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OutboxResponse"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "id is not a UUID"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                },
+                "summary": "Inspect an outbox row",
+                "tags": [
+                    "emails"
+                ]
+            }
+        },
+        "/healthz": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    }
+                },
+                "summary": "Liveness probe",
+                "tags": [
+                    "health"
+                ]
+            }
+        },
+        "/readyz": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    }
+                },
+                "summary": "Readiness probe",
+                "tags": [
+                    "health"
+                ]
+            }
+        },
+        "/templates": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/TemplateResponse"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    }
+                },
+                "summary": "List templates",
+                "tags": [
+                    "templates"
+                ]
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateTemplateRequest"
+                            }
+                        }
+                    },
+                    "description": "Template metadata",
+                    "required": true,
+                    "x-originalParamName": "request"
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemplateResponse"
+                                }
+                            }
+                        },
+                        "description": "Created"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Bad Request"
+                    },
+                    "409": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "code already exists"
+                    }
+                },
+                "summary": "Create a template",
+                "tags": [
+                    "templates"
+                ]
+            }
+        },
+        "/templates/preview": {
+            "post": {
+                "description": "Renders subject/body server-side using the same renderer as send.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PreviewTemplateRequest"
+                            }
+                        }
+                    },
+                    "description": "Draft to render",
+                    "required": true,
+                    "x-originalParamName": "request"
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PreviewTemplateResponse"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "invalid body, schema, or params"
+                    }
+                },
+                "summary": "Preview a template draft",
+                "tags": [
+                    "templates"
+                ]
+            }
+        },
+        "/templates/{id}": {
+            "delete": {
+                "parameters": [
+                    {
+                        "description": "template UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                },
+                "summary": "Delete a template",
+                "tags": [
+                    "templates"
+                ]
+            },
+            "get": {
+                "parameters": [
+                    {
+                        "description": "template UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemplateResponse"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                },
+                "summary": "Get a template",
+                "tags": [
+                    "templates"
+                ]
+            }
+        },
+        "/templates/{id}/active-version": {
+            "patch": {
+                "parameters": [
+                    {
+                        "description": "template UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SetActiveVersionRequest"
+                            }
+                        }
+                    },
+                    "description": "Target version id",
+                    "required": true,
+                    "x-originalParamName": "request"
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "version belongs to another template"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                },
+                "summary": "Set the active version",
+                "tags": [
+                    "templates"
+                ]
+            }
+        },
+        "/templates/{id}/versions": {
+            "get": {
+                "parameters": [
+                    {
+                        "description": "template UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "$ref": "#/components/schemas/TemplateVersionResponse"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                },
+                "summary": "List template versions",
+                "tags": [
+                    "templates"
+                ]
+            },
+            "post": {
+                "description": "Validates that params_schema is itself a compilable JSON Schema.",
+                "parameters": [
+                    {
+                        "description": "template UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateTemplateVersionRequest"
+                            }
+                        }
+                    },
+                    "description": "Version content",
+                    "required": true,
+                    "x-originalParamName": "request"
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemplateVersionResponse"
+                                }
+                            }
+                        },
+                        "description": "Created"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "invalid body or schema"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "template not found"
+                    }
+                },
+                "summary": "Create a template version",
+                "tags": [
+                    "templates"
+                ]
+            }
+        },
+        "/templates/{id}/versions/{version}": {
+            "get": {
+                "parameters": [
+                    {
+                        "description": "template UUID",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "version number",
+                        "in": "path",
+                        "name": "version",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemplateVersionResponse"
+                                }
+                            }
+                        },
+                        "description": "OK"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not Found"
+                    }
+                },
+                "summary": "Get a template version",
+                "tags": [
+                    "templates"
+                ]
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8081/api/v1"
+        },
+        {
+            "url": "https://localhost:8081/api/v1"
+        }
+    ]
+}
