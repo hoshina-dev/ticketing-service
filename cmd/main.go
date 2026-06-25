@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	_ "github.com/hoshina-dev/ticketing-service/docs"
+	"github.com/hoshina-dev/ticketing-service/internal/clients/copium"
 	"github.com/hoshina-dev/ticketing-service/internal/config"
 	"github.com/hoshina-dev/ticketing-service/internal/handler"
 	"github.com/hoshina-dev/ticketing-service/internal/middleware"
@@ -38,7 +39,13 @@ func main() {
 	ticketRepo := repository.NewTicketRepository(db)
 	tetRepo := repository.NewTicketExperimentTemplateRepository(db)
 
-	ticketSvc := service.NewTicketService(ticketRepo, tetRepo)
+	copiumNotifier, err := copium.NewNotifier(cfg.Copium.BaseURL, cfg.Copium.Templates)
+	if err != nil {
+		slog.Error("failed to create copium notifier", "error", err)
+		os.Exit(1)
+	}
+
+	ticketSvc := service.NewTicketService(ticketRepo, tetRepo, copiumNotifier)
 
 	ticketHandler := handler.NewTicketHandler(ticketSvc)
 	tetHandler := handler.NewTicketExperimentTemplateHandler(ticketSvc)

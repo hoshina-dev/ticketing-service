@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -23,18 +24,25 @@ type TicketService interface {
 	ListExperimentTemplates(ctx context.Context, ticketID uuid.UUID) ([]*dto.TicketExperimentTemplateResponse, error)
 }
 
+type stageNotifier interface {
+	NotifyStageAdvanced(ctx context.Context, ticket *model.Ticket, stage model.TicketStatus) error
+}
+
 type ticketService struct {
 	ticketRepo repository.TicketRepository
 	tetRepo    repository.TicketExperimentTemplateRepository
+	notifier   stageNotifier
 }
 
 func NewTicketService(
 	ticketRepo repository.TicketRepository,
 	tetRepo repository.TicketExperimentTemplateRepository,
+	notifier stageNotifier,
 ) TicketService {
 	return &ticketService{
 		ticketRepo: ticketRepo,
 		tetRepo:    tetRepo,
+		notifier:   notifier,
 	}
 }
 
@@ -67,6 +75,8 @@ func (s *ticketService) CreateTicket(ctx context.Context, req dto.CreateTicketRe
 	if err != nil {
 		return nil, err
 	}
+
+	s.notifyStageBestEffort(ctx, created, model.StatusRequested)
 
 	return toTicketResponse(created), nil
 }
@@ -148,6 +158,8 @@ func (s *ticketService) TransitionStatus(ctx context.Context, id uuid.UUID, req 
 	if err := s.ticketRepo.Update(ctx, ticket); err != nil {
 		return nil, err
 	}
+
+	s.notifyStageBestEffort(ctx, ticket, target)
 
 	return toTicketResponse(ticket), nil
 }
@@ -240,5 +252,15 @@ func toTETResponse(t *model.TicketExperimentTemplate) *dto.TicketExperimentTempl
 		TicketID:             t.TicketID,
 		ExperimentTemplateID: t.ExperimentTemplateID,
 		CreatedAt:            t.CreatedAt,
+	}
+}
+
+func (s *ticketService) notifyStageBestEffort(ctx context.Context, ticket *model.Ticket, stage model.TicketStatus) {
+	if err := s.notifier.NotifyStageAdvanced(ctx, ticket, stage); err != nil {
+		slog.Error("stage notification failed",
+			"ticket_id", ticket.ID,
+			"stage", stage,
+			"error", err,
+		)
 	}
 }

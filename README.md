@@ -83,6 +83,12 @@ Copy `.env.example` to `.env`:
 | --- | --- | --- |
 | `PORT` | `8080` | HTTP listen port |
 | `DATA_SOURCE_NAME` | — | Postgres URL (required) |
+| `COPIUM_BASE_URL` | — | Copium API base URL including `/api/v1` (required) |
+| `COPIUM_TEMPLATE_REQUESTED` | — | Copium template UUID for the `REQUESTED` stage (required) |
+| `COPIUM_TEMPLATE_PENDING` | — | Copium template UUID for the `PENDING` stage (required) |
+| `COPIUM_TEMPLATE_EXPERIMENTING` | — | Copium template UUID for the `EXPERIMENTING` stage (required) |
+| `COPIUM_TEMPLATE_FINALIZING` | — | Copium template UUID for the `FINALIZING` stage (required) |
+| `COPIUM_TEMPLATE_CLOSED` | — | Copium template UUID for the `CLOSED` stage (required) |
 
 ## API documentation
 

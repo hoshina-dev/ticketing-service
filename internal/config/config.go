@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Port           string
 	DataSourceName string
+	Copium         CopiumConfig
 }
 
 func Load() (*Config, error) {
@@ -23,6 +24,12 @@ func Load() (*Config, error) {
 	if cfg.DataSourceName == "" {
 		return nil, fmt.Errorf("DATA_SOURCE_NAME is required")
 	}
+
+	copium, err := loadCopiumConfig()
+	if err != nil {
+		return nil, err
+	}
+	cfg.Copium = copium
 
 	return cfg, nil
 }
